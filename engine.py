@@ -67,15 +67,19 @@ class RenderEngine:
                 dist_min = dist
                 obj_hit = obj
         return (dist_min, obj_hit)
-
+    
     def color_at(self, obj_hit, hit_pos, normal, scene):
         material = obj_hit.material
         obj_color = material.color_at(hit_pos)
         to_cam = scene.camera - hit_pos
         specular_k = 50
-        color = material.ambient * Color.from_hex("#000000")
+        color = material.ambient * obj_color
         for light in scene.lights:
             to_light = Ray(hit_pos, light.position - hit_pos)
+            shadow_ray = Ray(hit_pos + normal * self.MIN_DISPLACE, light.position - hit_pos)
+            dist_to_light, _ = self.find_nearest(shadow_ray, scene)
+            if dist_to_light is not None and dist_to_light < to_light.length():
+                continue
             color += (
                 obj_color
                 * material.diffuse
@@ -88,3 +92,4 @@ class RenderEngine:
                 * max(normal.dot_product(half_vector), 0) ** specular_k
             )
         return color
+
