@@ -1,4 +1,4 @@
-# **PyRay**
+# **PRay**
 A ray tracing tool made in Python
 
 ## **Test Sphere**:
