@@ -3,6 +3,10 @@ from image import Image
 from ray import Ray
 from point import Point
 from color import Color
+import tempfile
+from pathlib import Path
+import shutil
+from multiprocessing import Process, Value
 
 
 class RenderEngine:
@@ -12,7 +16,43 @@ class RenderEngine:
     def __init__(self, samples_per_pixel=4):
         self.samples_per_pixel = samples_per_pixel
 
-    def render(self, scene):
+    def render_multiprocess(self, scene, processes_count, img_fileobj):
+        def split_range(count, parts):
+            d, r = divmod(count, parts)
+            return [
+                (i * d + min(i, r), (i + 1) * d + min(i + 1, r)) for i in range(parts)
+            ]
+
+        width = scene.width
+        height = scene.height
+        ranges = split_range(height, processes_count)
+        temp_dir = tempfile.mkdtemp()
+        temp_files_tmpl = "render_part_{}.temp"
+        processes = []
+        try:
+            rows_done = Value("i", 0)
+            for hmin, hmax in ranges:
+                part_file = Path(temp_dir) / temp_files_tmpl.format(hmin)
+                processes.append(
+                    Process(
+                        target=self.render,
+                        args=(scene, hmin, hmax, part_file, rows_done),
+                    )
+                )
+            for p in processes:
+                p.start()
+            for p in processes:
+                p.join()
+            Image.write_ppm_header(img_fileobj, width=width, height=height)
+            for hmin, _ in ranges:
+                part_file = Path(temp_dir) / temp_files_tmpl.format(hmin)
+                img_fileobj.write(open(part_file, "r").read())
+        finally:
+            for p in processes:
+                p.terminate()
+            shutil.rmtree(temp_dir, ignore_errors=True)
+
+    def render(self, scene, hmin, hmax, part_file, rows_done):
         width = scene.width
         height = scene.height
         aspect_ratio = width / height
@@ -23,8 +63,8 @@ class RenderEngine:
         y1 = 1 / aspect_ratio
         ystep = (y1 - y0) / (height - 1)
         camera = scene.camera
-        pixels = Image(width, height)
-        for j in range(height):
+        pixels = Image(width, hmax - hmin)
+        for j in range(hmin, hmax):
             y = y0 + j * ystep
             for i in range(width):
                 x = x0 + i * xstep
@@ -35,9 +75,15 @@ class RenderEngine:
                     ray = Ray(camera, Point(jitter_x, jitter_y) - camera)
                     pixel_color += self.ray_trace(ray, scene)
                 pixel_color *= 1.0 / self.samples_per_pixel
-                pixels.set_pixel(i, j, pixel_color)
-                print("{:3.0f}%".format(float(j) / float(height) * 100), end="\r")
-        return pixels
+                pixels.set_pixel(i, j - hmin, pixel_color)
+            with rows_done.get_lock():
+                rows_done.value += 1
+                print(
+                    "{:3.0f}%".format(float(rows_done.value) / float(height) * 100),
+                    end="\r",
+                )
+        with open(part_file, "w") as f:
+            pixels.write_ppm_raw(f)
 
     def ray_trace(self, ray, scene, depth=0):
         color = Color(0, 0, 0)
@@ -67,7 +113,7 @@ class RenderEngine:
                 dist_min = dist
                 obj_hit = obj
         return (dist_min, obj_hit)
-    
+
     def color_at(self, obj_hit, hit_pos, normal, scene):
         material = obj_hit.material
         obj_color = material.color_at(hit_pos)
@@ -76,7 +122,9 @@ class RenderEngine:
         color = material.ambient * obj_color
         for light in scene.lights:
             to_light = Ray(hit_pos, light.position - hit_pos)
-            shadow_ray = Ray(hit_pos + normal * self.MIN_DISPLACE, light.position - hit_pos)
+            shadow_ray = Ray(
+                hit_pos + normal * self.MIN_DISPLACE, light.position - hit_pos
+            )
             dist_to_light, _ = self.find_nearest(shadow_ray, scene)
             if dist_to_light is not None and dist_to_light < to_light.length():
                 continue
@@ -92,4 +140,3 @@ class RenderEngine:
                 * max(normal.dot_product(half_vector), 0) ** specular_k
             )
         return color
-
