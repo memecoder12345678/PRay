@@ -1,5 +1,6 @@
 from vector import Vector
 
+
 class Color(Vector):
     @classmethod
     def from_hex(cls, hexcolor="#000000"):

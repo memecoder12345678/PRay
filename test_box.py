@@ -2,7 +2,7 @@ from color import Color
 from light import Light
 from material import Material, ChequeredMaterial
 from point import Point
-from sphere import BallSphere, BoxRectangle
+from geometry import Sphere, Box
 from vector import Vector
 
 WIDTH = 960
@@ -10,7 +10,7 @@ HEIGHT = 540
 RENDERED_IMG = "test_box.ppm"
 CAMERA = Vector(0, 0, -2)
 OBJECTS = [
-    BallSphere(
+    Sphere(
         Point(0, 10000.5, 1),
         10000.0,
         ChequeredMaterial(
@@ -18,10 +18,10 @@ OBJECTS = [
             color2=Color.from_hex("#606060"),
             ambient=0.2,
             reflection=0.2,
-            diffuse=0.4
+            diffuse=0.4,
         ),
     ),
-    BoxRectangle(
+    Box(
         Point(-1, 0.2, 2),
         width=0.8,
         height=0.8,
@@ -31,10 +31,10 @@ OBJECTS = [
             ambient=0.1,
             diffuse=0.7,
             specular=1.0,
-            reflection=0.3
-        )
+            reflection=0.3,
+        ),
     ),
-    BoxRectangle(
+    Box(
         Point(1, 0, 2),
         width=0.6,
         height=1.0,
@@ -44,21 +44,12 @@ OBJECTS = [
             ambient=0.1,
             diffuse=0.7,
             specular=1.0,
-            reflection=0.3
-        )
+            reflection=0.3,
+        ),
     ),
 ]
 LIGHTS = [
-    Light(
-        Point(2.0, -0.5, -10),
-        Color.from_hex("#FFFFFF")
-    ),
-    Light(
-        Point(-2.0, -0.5, -5),
-        Color.from_hex("#FFE5B4")
-    ),
-    Light(
-        Point(0, -10.5, 0),
-        Color.from_hex("#E6E6E6")
-    ),
+    Light(Point(2.0, -0.5, -10), Color.from_hex("#FFFFFF")),
+    Light(Point(-2.0, -0.5, -5), Color.from_hex("#FFE5B4")),
+    Light(Point(0, -10.5, 0), Color.from_hex("#E6E6E6")),
 ]

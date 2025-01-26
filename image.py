@@ -10,7 +10,7 @@ class Image:
     def write_ppm(self, filename):
         def to_byte(c):
             return round(max(min(c * 255, 255), 0))
-        
+
         filename.write(f"P3 {self.width} {self.height}\n255\n")
         for row in self.pixels:
             for color in row:
