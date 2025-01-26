@@ -2,7 +2,7 @@ import math
 from vector import Vector
 from point import Point
 
-class BallSphere:
+class Sphere:
     def __init__(self, center, radius, material):
         self.center = center
         self.radius = radius
@@ -22,7 +22,7 @@ class BallSphere:
     def normal(self, surface_point):
         return (surface_point - self.center).normalize()
 
-class RectangleSphere:
+class Rectangle:
     def __init__(self, center, width, height, normal, material):
         self.center = center
         self.width = width
@@ -52,7 +52,7 @@ class RectangleSphere:
     def normal(self, surface_point):
         return self.normal_vector
 
-class BoxRectangle:
+class Box:
     def __init__(self, center, width, height, depth, material):
         self.center = center
         self.width = width
@@ -60,27 +60,27 @@ class BoxRectangle:
         self.depth = depth
         self.material = material
         self.faces = [
-            RectangleSphere(
+            Rectangle(
                 Point(center.x, center.y, center.z - depth/2),
                 width, height, Vector(0, 0, -1), material
             ),
-            RectangleSphere(
+            Rectangle(
                 Point(center.x, center.y, center.z + depth/2),
                 width, height, Vector(0, 0, 1), material
             ),
-            RectangleSphere(
+            Rectangle(
                 Point(center.x - width/2, center.y, center.z),
                 depth, height, Vector(-1, 0, 0), material
             ),
-            RectangleSphere(
+            Rectangle(
                 Point(center.x + width/2, center.y, center.z),
                 depth, height, Vector(1, 0, 0), material
             ),
-            RectangleSphere(
+            Rectangle(
                 Point(center.x, center.y + height/2, center.z),
                 width, depth, Vector(0, 1, 0), material
             ),
-            RectangleSphere(
+            Rectangle(
                 Point(center.x, center.y - height/2, center.z),
                 width, depth, Vector(0, -1, 0), material
             )
