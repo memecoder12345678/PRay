@@ -1,5 +1,5 @@
 # **PRay**
-A ray tracing tool made in Python
+**A ray tracing tool made in Python**
 
 ## **Test Sphere**:
 ![test_ball](test_sphere.png)
