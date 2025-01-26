@@ -18,7 +18,7 @@ OBJECTS = [
             color2=Color.from_hex("#606060"),
             ambient=0.2,
             reflection=0.2,
-            diffuse=0.3,
+            diffuse=0.1,
         ),
     ),
     Box(
