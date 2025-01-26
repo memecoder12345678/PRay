@@ -1,8 +1,8 @@
 from color import Color
-from light import Light
-from material import MirrorMaterial, Material
-from point import Point
 from geometry import Sphere
+from light import Light
+from material import Material, MirrorMaterial
+from point import Point
 from vector import Vector
 
 WIDTH = 960

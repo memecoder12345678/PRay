@@ -1,8 +1,8 @@
 from color import Color
+from geometry import Box, Sphere
 from light import Light
-from material import Material, ChequeredMaterial
+from material import ChequeredMaterial, Material
 from point import Point
-from geometry import Sphere, Box
 from vector import Vector
 
 WIDTH = 960

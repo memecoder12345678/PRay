@@ -10,7 +10,7 @@ class Image:
     def write_ppm(self, filename):
         Image.write_ppm_header(
             filename, self.width, self.height
-        )  # vì hàm write_ppm_header là hàm phương thức tĩnh nên không thể gọi thông qua self
+        )
         self.write_ppm_raw(filename)
 
     @staticmethod

@@ -2,6 +2,7 @@ import argparse
 import importlib
 import os
 from multiprocessing import cpu_count
+
 from engine import RenderEngine
 from scene import Scene
 
@@ -21,7 +22,7 @@ def main():
         "--process",
         type=int,
         default=0,
-        help="Output file (default: <scene>_rendered.ppm)",
+        help="Number of processes to use (default: number of CPUs)",
     )
     args = parser.parse_args()
     samples = args.samples
