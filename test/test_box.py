@@ -22,7 +22,7 @@ OBJECTS = [
         ),
     ),
     Box(
-        Point(-1, 0.2, 2),
+        Point(-1, 0.1, 2),
         width=0.8,
         height=0.8,
         depth=0.8,

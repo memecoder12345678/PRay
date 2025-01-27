@@ -80,12 +80,10 @@ class RenderEngine:
             with rows_done.get_lock():
                 rows_done.value += 1
                 print(
-                    "\r[{:50}] {:3.0f}%".format(
-                        "#" * int(float(rows_done.value) / float(height) * 50),
-                        float(rows_done.value) / float(height) * 100
-                    ),
+                    f"\rProcess: [{('#' * int(float(rows_done.value) / float(height) * 50)).ljust(50, '.')}"
+                    f"] {float(rows_done.value) / float(height) * 100:3.0f}%",
                     end="",
-                )   
+                )
         with open(part_file, "w") as f:
             pixels.write_ppm_raw(f)
 
