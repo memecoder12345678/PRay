@@ -8,6 +8,7 @@ from color import Color
 from image import Image
 from point import Point
 from ray import Ray
+from spatial_grid import SpatialGrid
 
 
 class RenderEngine:
@@ -23,6 +24,9 @@ class RenderEngine:
             return [
                 (i * d + min(i, r), (i + 1) * d + min(i + 1, r)) for i in range(parts)
             ]
+
+        # Initialize spatial grid
+        self.grid = SpatialGrid(scene.objects)
 
         width = scene.width
         height = scene.height
@@ -80,9 +84,12 @@ class RenderEngine:
             with rows_done.get_lock():
                 rows_done.value += 1
                 print(
-                    "{:3.0f}%".format(float(rows_done.value) / float(height) * 100),
-                    end="\r",
-                )
+                    "\r[{:50}] {:3.0f}%".format(
+                        "#" * int(float(rows_done.value) / float(height) * 50),
+                        float(rows_done.value) / float(height) * 100
+                    ),
+                    end="",
+                )   
         with open(part_file, "w") as f:
             pixels.write_ppm_raw(f)
 
@@ -108,7 +115,8 @@ class RenderEngine:
     def find_nearest(self, ray, scene):
         dist_min = None
         obj_hit = None
-        for obj in scene.objects:
+        # Only check objects in cells that ray passes through
+        for obj in self.grid.get_objects(ray):
             dist = obj.intersects(ray)
             if dist is not None and (obj_hit is None or dist < dist_min):
                 dist_min = dist
@@ -120,7 +128,7 @@ class RenderEngine:
         obj_color = material.color_at(hit_pos)
         to_cam = scene.camera - hit_pos
         specular_k = 50
-        color = material.ambient * Color.from_hex("#FFFFFF")
+        color = material.ambient * Color.from_hex("#FFFFFF") * 0.5
         for light in scene.lights:
             to_light = Ray(hit_pos, light.position - hit_pos)
             shadow_ray = Ray(

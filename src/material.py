@@ -16,7 +16,7 @@ class Material:
         self.specular = specular
         self.reflection = reflection
 
-    def color_at(self, position):
+    def color_at(self, _):
         return self.color
 
 
@@ -59,5 +59,5 @@ class MirrorMaterial:
         self.specular = specular
         self.reflection = reflection
 
-    def color_at(self, position):
+    def color_at(self, _):
         return self.color

@@ -2,7 +2,7 @@ class Image:
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.pixels = [[0 for _ in range(width)] for _ in range(height)]
+        self.pixels = [[None for _ in range(width)] for _ in range(height)]
 
     def set_pixel(self, x, y, color):
         self.pixels[y][x] = color
