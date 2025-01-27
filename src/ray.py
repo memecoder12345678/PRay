@@ -4,4 +4,4 @@ class Ray:
         self.direction = direction.normalize()
         
     def length(self):
-        return self.direction.magnitude() 
+        return self.direction.magnitude()

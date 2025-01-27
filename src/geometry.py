@@ -51,7 +51,7 @@ class Rectangle:
             return t
         return None
 
-    def normal(self, surface_point):
+    def normal(self, _):
         return self.normal_vector
 
 
@@ -106,20 +106,34 @@ class Box:
                 material,
             ),
         ]
+        self._last_hit_face = None
 
     def intersects(self, ray):
-        nearest = None
+        nearest = float("inf")
+        hit_face = None
+
         for face in self.faces:
             dist = face.intersects(ray)
-            if dist is not None and (nearest is None or dist < nearest):
+            if dist is not None and dist < nearest:
                 nearest = dist
-        return nearest
+                hit_face = face
+
+        if hit_face:
+            self._last_hit_face = hit_face
+            return nearest
+        return None
 
     def normal(self, surface_point):
+        if self._last_hit_face:
+            return self._last_hit_face.normal_vector
+
+        nearest_face = None
+        min_dist = float("inf")
+
         for face in self.faces:
-            if (
-                abs((surface_point - face.center).dot_product(face.normal_vector))
-                < 0.0001
-            ):
-                return face.normal_vector
-        return Vector(0, 1, 0)
+            dist = abs((surface_point - face.center).dot_product(face.normal_vector))
+            if dist < min_dist:
+                min_dist = dist
+                nearest_face = face
+
+        return nearest_face.normal_vector if nearest_face else Vector(0, 1, 0)

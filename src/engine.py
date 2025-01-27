@@ -48,6 +48,8 @@ class RenderEngine:
             for hmin, _ in ranges:
                 part_file = Path(temp_dir) / temp_files_tmpl.format(hmin)
                 img_fileobj.write(open(part_file, "r").read())
+        except Exception as e:
+            print(e)
         finally:
             for p in processes:
                 p.terminate()
