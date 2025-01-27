@@ -83,7 +83,7 @@ class RenderEngine:
                 rows_done.value += 1
                 print(
                     f"\rProcess: [{('#' * int(float(rows_done.value) / float(height) * 50)).ljust(50, '.')}"
-                    f"] {float(rows_done.value) / float(height) * 100:3.0f}%",
+                    f"] {float(rows_done.value) / float(height) * 100:5.2f}%",
                     end="",
                 )
         with open(part_file, "w") as f:
