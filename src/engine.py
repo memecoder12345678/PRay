@@ -24,9 +24,6 @@ class RenderEngine:
                 (i * d + min(i, r), (i + 1) * d + min(i + 1, r)) for i in range(parts)
             ]
 
-        # Initialize spatial grid
-        self.grid = SpatialGrid(scene.objects)
-
         width = scene.width
         height = scene.height
         ranges = split_range(height, processes_count)
@@ -114,8 +111,7 @@ class RenderEngine:
     def find_nearest(self, ray, scene):
         dist_min = None
         obj_hit = None
-        # Only check objects in cells that ray passes through
-        for obj in self.grid.get_objects(ray):
+        for obj in scene.objects:
             dist = obj.intersects(ray)
             if dist is not None and (obj_hit is None or dist < dist_min):
                 dist_min = dist
