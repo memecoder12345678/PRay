@@ -8,7 +8,6 @@ from color import Color
 from image import Image
 from point import Point
 from ray import Ray
-from spatial_grid import SpatialGrid
 
 
 class RenderEngine:
