@@ -24,9 +24,16 @@ def main():
         default=0,
         help="Number of processes to use (default: number of CPUs)",
     )
+    parser.add_argument(
+        "-r",
+        "--raw",
+        action="store_true",
+        help="Output raw PPM instead of PNG (default: PNG)",
+    )
     args = parser.parse_args()
     samples = args.samples
     process = args.process
+    raw = args.raw
     if process < 0:
         print("Error: process must be at least 0")
         return
@@ -42,7 +49,7 @@ def main():
     engine = RenderEngine(samples_per_pixel=samples)
     os.chdir(os.path.dirname(os.path.abspath(mod.__file__)))
     with open(mod.RENDERED_IMG, "wb") as img_file:
-        engine.render_multiprocess(scene, process, img_file)
+        engine.render_multiprocess(scene, process, img_file, raw)
 
 
 if __name__ == "__main__":

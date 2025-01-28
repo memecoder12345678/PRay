@@ -17,7 +17,7 @@ class RenderEngine:
     def __init__(self, samples_per_pixel=4):
         self.samples_per_pixel = samples_per_pixel
 
-    def render_multiprocess(self, scene, processes_count, img_fileobj):
+    def render_multiprocess(self, scene, processes_count, img_fileobj, raw=False):
         def split_range(count, parts):
             d, r = divmod(count, parts)
             return [
@@ -51,7 +51,11 @@ class RenderEngine:
                 part_file = Path(temp_dir) / temp_files_tmpl.format(hmin)
                 with open(ppm_file, "a") as f:
                     f.write(open(part_file, "r").read())
-            Image.ppm2png(ppm_file, img_fileobj)
+            if raw:
+                with open(ppm_file, "r") as f:
+                    img_fileobj.write(f.read())
+            else:
+                Image.ppm2png(ppm_file, img_fileobj)
         finally:
             for p in processes:
                 p.terminate()
