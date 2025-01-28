@@ -29,9 +29,7 @@ OBJECTS = [
         material=Material(
             Color.from_hex("#CC3333"),
             ambient=0.1,
-            diffuse=0.7,
-            specular=1.0,
-            reflection=0.3,
+            reflection=0.1,
         ),
     ),
     Box(
@@ -42,9 +40,7 @@ OBJECTS = [
         material=Material(
             Color.from_hex("#3333CC"),
             ambient=0.1,
-            diffuse=0.7,
-            specular=1.0,
-            reflection=0.3,
+            reflection=0.1,
         ),
     ),
 ]

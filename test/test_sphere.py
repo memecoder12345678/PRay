@@ -14,7 +14,7 @@ OBJECTS = [
         Point(0, 10000.5, 1),
         10000.0,
         MirrorMaterial(
-            color=Color.from_hex("#606060"), ambient=0.2, reflection=0.2, diffuse=0.1
+            color=Color.from_hex("#606060"), ambient=0.2, reflection=0.8, diffuse=0.1
         ),
     ),
     Sphere(
@@ -23,9 +23,7 @@ OBJECTS = [
         Material(
             Color.from_hex("#306998"),
             ambient=0.1,
-            diffuse=0.7,
-            specular=1.0,
-            reflection=0.3,
+            reflection=0.1,
         ),
     ),
     Sphere(
@@ -34,9 +32,7 @@ OBJECTS = [
         Material(
             Color.from_hex("#FFD43B"),
             ambient=0.1,
-            diffuse=0.7,
-            specular=1.0,
-            reflection=0.3,
+            reflection=0.1,
         ),
     ),
 ]

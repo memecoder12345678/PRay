@@ -60,6 +60,8 @@ class MirrorMaterial:
         self.reflection = reflection
         if diffuse > 0.1:
             raise ValueError("Diffuse should be less than 0.1 for mirror material")
+        if reflection < 0.8:
+            raise ValueError("Reflection should be at least 0.8 for mirror material")
 
     def color_at(self, _):
         return self.color
