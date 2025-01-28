@@ -7,7 +7,7 @@ from vector import Vector
 
 WIDTH = 960
 HEIGHT = 540
-RENDERED_IMG = "test_sphere.ppm"
+RENDERED_IMG = "test_sphere.png"
 CAMERA = Vector(0, -0.35, -1)
 OBJECTS = [
     Sphere(

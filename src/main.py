@@ -41,7 +41,7 @@ def main():
     scene = Scene(mod.CAMERA, mod.OBJECTS, mod.LIGHTS, mod.WIDTH, mod.HEIGHT)
     engine = RenderEngine(samples_per_pixel=samples)
     os.chdir(os.path.dirname(os.path.abspath(mod.__file__)))
-    with open(mod.RENDERED_IMG, "w") as img_file:
+    with open(mod.RENDERED_IMG, "wb") as img_file:
         engine.render_multiprocess(scene, process, img_file)
 
 
