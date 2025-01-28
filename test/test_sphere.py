@@ -13,27 +13,19 @@ OBJECTS = [
     Sphere(
         Point(0, 10000.5, 1),
         10000.0,
-        MirrorMaterial(
-            color=Color.from_hex("#606060"), ambient=0.2, reflection=0.8, diffuse=0.1
-        ),
+        MirrorMaterial(color=Color.from_hex("#606060")),
     ),
     Sphere(
         Point(0.75, -0.1, 1),
         0.6,
         Material(
-            Color.from_hex("#306998"),
-            ambient=0.1,
-            reflection=0.1,
-        ),
+            Color.from_hex("#306998")),
     ),
     Sphere(
         Point(-0.75, -0.1, 2.25),
         0.6,
         Material(
-            Color.from_hex("#FFD43B"),
-            ambient=0.1,
-            reflection=0.1,
-        ),
+            Color.from_hex("#FFD43B")),
     ),
 ]
 LIGHTS = [

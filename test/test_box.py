@@ -16,9 +16,6 @@ OBJECTS = [
         ChequeredMaterial(
             color1=Color.from_hex("#808080"),
             color2=Color.from_hex("#606060"),
-            ambient=0.2,
-            reflection=0.2,
-            diffuse=0.1,
         ),
     ),
     Box(
@@ -26,22 +23,14 @@ OBJECTS = [
         width=0.8,
         height=0.8,
         depth=0.8,
-        material=Material(
-            Color.from_hex("#CC3333"),
-            ambient=0.1,
-            reflection=0.1,
-        ),
+        material=Material(Color.from_hex("#CC3333")),
     ),
     Box(
         Point(1, 0, 2),
         width=0.6,
         height=1.0,
         depth=0.6,
-        material=Material(
-            Color.from_hex("#3333CC"),
-            ambient=0.1,
-            reflection=0.1,
-        ),
+        material=Material(Color.from_hex("#3333CC")),
     ),
 ]
 LIGHTS = [

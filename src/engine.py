@@ -72,11 +72,15 @@ class RenderEngine:
             for i in range(width):
                 x = x0 + i * xstep
                 pixel_color = Color(0, 0, 0)
-                for _ in range(self.samples_per_pixel):
-                    jitter_x = x + random.uniform(-0.5, 0.5) * xstep
-                    jitter_y = y + random.uniform(-0.5, 0.5) * ystep
-                    ray = Ray(camera, Point(jitter_x, jitter_y) - camera)
-                    pixel_color += self.ray_trace(ray, scene)
+                if self.samples_per_pixel == 1:
+                    ray = Ray(camera, Point(x, y) - camera)
+                    pixel_color = self.ray_trace(ray, scene)
+                else:
+                    for _ in range(self.samples_per_pixel):
+                        jitter_x = x + random.uniform(-0.5, 0.5) * xstep
+                        jitter_y = y + random.uniform(-0.5, 0.5) * ystep
+                        ray = Ray(camera, Point(jitter_x, jitter_y) - camera)
+                        pixel_color += self.ray_trace(ray, scene)
                 pixel_color *= 1.0 / self.samples_per_pixel
                 pixels.set_pixel(i, j - hmin, pixel_color)
             with rows_done.get_lock():
@@ -86,6 +90,11 @@ class RenderEngine:
                     f"] {float(rows_done.value) / float(height) * 100:5.2f}%",
                     end="",
                 )
+                if (
+                    float(f"{float(rows_done.value) / float(height) * 100:5.2f}")
+                    == 100.00
+                ):
+                    print()
         with open(part_file, "w") as f:
             pixels.write_ppm_raw(f)
 
@@ -123,8 +132,9 @@ class RenderEngine:
         obj_color = material.color_at(hit_pos)
         to_cam = scene.camera - hit_pos
         specular_k = 50
-        color = material.ambient * obj_color * Color.from_hex("#FFFFFF")
+        color = Color.from_hex("#000000")
         for light in scene.lights:
+            color += material.ambient * obj_color * light.color
             to_light = Ray(hit_pos, light.position - hit_pos)
             shadow_ray = Ray(
                 hit_pos + normal * self.MIN_DISPLACE, light.position - hit_pos
