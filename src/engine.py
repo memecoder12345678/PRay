@@ -34,7 +34,7 @@ class RenderEngine:
             rows_done = Value("i", 0)
             for hmin, hmax in ranges:
                 part_file = Path(temp_dir) / temp_files_tmpl.format(hmin)
-                ppm_file = Path(temp_dir) / f"raw_output.ppm"
+                raw_output = Path(temp_dir) / f"raw_output.ppm"
                 processes.append(
                     Process(
                         target=self.render,
@@ -45,17 +45,17 @@ class RenderEngine:
                 p.start()
             for p in processes:
                 p.join()
-            with open(ppm_file, "w") as f:
+            with open(raw_output, "w") as f:
                 Image.write_ppm_header(f, width=width, height=height)
             for hmin, _ in ranges:
                 part_file = Path(temp_dir) / temp_files_tmpl.format(hmin)
-                with open(ppm_file, "a") as f:
+                with open(raw_output, "a") as f:
                     f.write(open(part_file, "r").read())
             if raw:
-                with open(ppm_file, "r") as f:
+                with open(raw_output, "r") as f:
                     img_fileobj.write(f.read())
             else:
-                Image.ppm2png(ppm_file, img_fileobj)
+                Image.ppm2png(raw_output, img_fileobj)
         finally:
             for p in processes:
                 p.terminate()
