@@ -14,8 +14,8 @@ def main():
         "-s",
         "--samples",
         type=int,
-        default=4,
-        help="Number of samples per pixel for anti-aliasing (default: 4)",
+        default=32,
+        help="Number of samples per pixel for anti-aliasing (default: 32)",
     )
     parser.add_argument(
         "-p",
