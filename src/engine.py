@@ -14,7 +14,7 @@ class RenderEngine:
     MAX_DEPTH = 5
     MIN_DISPLACE = 0.0001
 
-    def __init__(self, samples_per_pixel=4):
+    def __init__(self, samples_per_pixel=32):
         self.samples_per_pixel = samples_per_pixel
 
     def render_multiprocess(self, scene, processes_count, img_fileobj, raw=False):
