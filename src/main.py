@@ -35,15 +35,13 @@ def main():
     process = args.process
     raw = args.raw
     if process < 0:
-        print("Error: process must be at least 0")
-        return
+        raise ValueError("Error: process must be at least 0")
     elif process == 0:
         process = cpu_count()
     else:
         process = min(process, cpu_count())
     if samples < 1:
-        print("Error: samples must be at least 1")
-        return
+        raise ValueError("Error: samples must be at least 1")
     mod = importlib.import_module(args.scene)
     scene = Scene(mod.CAMERA, mod.OBJECTS, mod.LIGHTS, mod.WIDTH, mod.HEIGHT)
     engine = RenderEngine(samples_per_pixel=samples)
