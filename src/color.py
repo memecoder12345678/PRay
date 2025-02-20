@@ -4,6 +4,7 @@ from vector import Vector
 class Color(Vector):
     @classmethod
     def from_hex(cls, hexcolor="#FFFFFF"):
+        hexcolor = hexcolor.upper()
         if hexcolor[0] != "#":
             raise ValueError("Hex color must start with #")
         elif len(hexcolor) != 7:
